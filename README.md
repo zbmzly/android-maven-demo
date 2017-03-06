@@ -1,5 +1,4 @@
-# Maven私有服务器搭建与Android Studio Library管理（Maven Server Creation And Android Library Management）
-
+# Maven私有服务器搭建与Android Studio Library管理（Maven Server Creation And Android Library Management）图片施工中
 此工程包含了与这篇文章相应的demo实例。方便你马上上手。
 
 （初版文档，文档内容需要随时更改和补充）
