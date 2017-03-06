@@ -1,4 +1,4 @@
-# Maven私有服务器搭建与Android Studio Library管理（Maven Server Creation And Android Library Management）图片施工中
+# Maven私有服务器搭建与Android Studio Library管理 (Maven Server Creation And Android Library Management)
 此工程包含了与这篇文章相应的demo实例。方便你马上上手。
 
 （初版文档，文档内容需要随时更改和补充）
@@ -13,7 +13,11 @@
 本地仓库需要有自己的仓库管理工具。Sonatype Nexus和Artifactory都是不错的选择。本文选择Sonatype Nexus。下载地址为：
 https://www.sonatype.com/download-oss-sonatype
 
+![image001desc](/assets/image001.png)
+
 请根据你的操作系统进行选择。下载解压后，你可以看到如下的文件夹：
+
+![image002desc](/assets/image002.png)
 
 在Console中（windows下为cmd），键入：
 ```
@@ -31,20 +35,30 @@ cd {nexus解压后目录/nexus-版本号/bin/}
 http://books.sonatype.com/nexus-book/reference3/install.html#service-windows
 
 ##打开私服管理器
-在浏览器中，输入http://localhost:8081，如果一切顺利，你可以看到Nexus Repository Manager管理页面。
+在浏览器中，输入`http://localhost:8081`，如果一切顺利，你可以看到Nexus Repository Manager管理页面。
 
 Tips：你也可以使用花生壳等工具，将其部署到外网中去（通过内网映射），这样你就可以用外网地址访问私服服务器了。
 
 ##创建私有仓库
 私服管理页面中，你首先会进入guest账户页面，这个账户你还不能新建repository。这里点击右上角的sign in
 
+![image003desc](/assets/image003.png)
+
 输入管理员密码
 
-默认为admin,密码admin123。登陆后，点击设置按钮 ，点击Repository-Repository-Create Repository
+![image004desc](/assets/image004.png)
+
+默认为admin,密码admin123。登陆后，点击设置按钮![image005desc](/assets/image005.png) ，点击Repository-Repository-Create Repository
+
+![image006desc](/assets/image006.png)
 
 选择maven2（hosted）类型。当然，你也可以选择别的类型的repository。这里选择maven2是为了和android studio的maven插件配合使用，也是推荐的选择。
 
+![image007desc](/assets/image007.png)
+
 输入repository的名字。Deployment policy选择Allow redeploy，否则library的提交就只能进行一次，不能重复提交。点击Create repository。
+
+![image008desc](/assets/image008.png)
 
 至此私有Maven库就创建完毕了。
 
@@ -102,7 +116,7 @@ uploadArchives {
   }
 }
 ```
-这段代码首先引用maven插件；然后定义了2个任务：androidSourcesJar和androidJavadocsJar，这两个任务分别用于对Java sources打包和Java doc进行打包；接着我们对uploadArchives.repositories闭包进行一些配置，包括仓库的url地址，比如http://localhost:8081/repository/android-lib，上传所需的用户名和密码，以及pom属性。
+这段代码首先引用maven插件；然后定义了2个任务：`androidSourcesJar`和`androidJavadocsJar`，这两个任务分别用于对Java sources打包和Java doc进行打包；接着我们对uploadArchives.repositories闭包进行一些配置，包括仓库的url地址，比如http://localhost:8081/repository/android-lib，上传所需的用户名和密码，以及pom属性。
 
 * 在module的build.gradle文件最后添加
 ```
@@ -114,6 +128,8 @@ apply from: './nexus_maven.gradle'
 点击Android Studio右侧的Gradle projects。双击uploadArchives上传代码。在Run Console中，查看是否成功。在Maven私服后台中，点击Browse server contents-Browse-Components，你应该可以看到刚才上传的repository。
 
 Tips：一般而言，maven库的提交者维护着整个library的版本，不应该由library的开发者执行，repository url用localhost应该已经足够了。
+
+![image009desc](/assets/image009.png)
 
 ##在Android Studio工程中使用某一maven库
 
@@ -145,8 +161,8 @@ compile '{groupId}:{artifactId}:{version}@{packaging}'
 ## 关于Gradle缓存
 在执行过一次Gradle的同步之后，Gradle会把对应的Library的文件下载在本地，之后会直接使用。所以当我们删除旧的Library，用同样的pom.project信息重新上传一个新的Library时，执行Gradle同步，并不会更新最新的Library下来。这个时候可以到仓库存储路径下把对应的Library文件删除。
 一般来说，
-Mac系统默认下载到：/Users/(用户名)/.gradle/caches/modules-2/files-2.1
-Windows系统默认下载到：C:\Users\(用户名)\.gradle\caches\modules-2\files-2.1
+Mac系统默认下载到：`/Users/(用户名)/.gradle/caches/modules-2/files-2.1`
+Windows系统默认下载到：`C:\Users\(用户名)\.gradle\caches\modules-2\files-2.1`
 
 
 
